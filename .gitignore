@@ -1,0 +1,7 @@
+*.dmg
+*.tar
+*.tar.gz
+*.zip
+*.app/
+node_modules/
+.next/
