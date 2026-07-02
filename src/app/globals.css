@@ -142,6 +142,8 @@ body {
   @apply font-sans;
 }
 
+@layer components {
+
 /* ===== FlyViaggi Premium UI Styles ===== */
 
 /* Animated Gradient Background */
@@ -320,3 +322,6 @@ body {
   background: rgba(10, 38, 71, 0.85);
   border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
+
+
+} /* end @layer components */
