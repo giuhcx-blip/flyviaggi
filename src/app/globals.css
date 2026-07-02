@@ -141,3 +141,182 @@
 body {
   @apply font-sans;
 }
+
+/* ===== FlyViaggi Premium UI Styles ===== */
+
+/* Animated Gradient Background */
+.premium-gradient-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  background-size: 400% 400%;
+  animation: gradientShift 20s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Particles */
+.particles-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  animation: particleFloat 15s infinite;
+}
+
+@keyframes particleFloat {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% {
+    transform: translateY(-100vh) translateX(100px);
+    opacity: 0;
+  }
+}
+
+/* Glassmorphism Card */
+.glass-card {
+  backdrop-filter: blur(20px) saturate(180%);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+/* Premium Header */
+.premium-header {
+  backdrop-filter: blur(20px) saturate(180%);
+  background: rgba(10, 38, 71, 0.6);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  transition: all 0.3s ease;
+}
+
+.premium-header.scrolled {
+  background: rgba(10, 38, 71, 0.92);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Hero Text Glow */
+.hero-title-gradient {
+  background: linear-gradient(135deg, #fff 0%, #F5A623 50%, #FF6B6B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: textGlow 3s ease-in-out infinite;
+}
+
+@keyframes textGlow {
+  0%, 100% { filter: drop-shadow(0 0 20px rgba(245, 166, 35, 0.3)); }
+  50% { filter: drop-shadow(0 0 40px rgba(245, 166, 35, 0.6)); }
+}
+
+/* Premium Button Glow */
+.btn-glow {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+.btn-glow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-glow:hover::before {
+  left: 100%;
+}
+
+.btn-glow:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+}
+
+/* Stats Counter Animation */
+.stat-number-glow {
+  background: linear-gradient(135deg, #F5A623, #FF6B6B);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Scroll Fade-in Animation */
+.premium-fade-in {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.premium-fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Service Card Icon Hover */
+.service-icon-hover {
+  transition: all 0.4s ease;
+}
+
+.glass-card:hover .service-icon-hover {
+  transform: scale(1.2) rotate(10deg);
+}
+
+/* Nav Link Underline */
+.nav-link-premium {
+  position: relative;
+}
+
+.nav-link-premium::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #F5A623, #FF6B6B);
+  transition: width 0.3s ease;
+}
+
+.nav-link-premium:hover::after {
+  width: 100%;
+}
+
+/* Premium Footer */
+.premium-footer {
+  backdrop-filter: blur(20px) saturate(180%);
+  background: rgba(10, 38, 71, 0.85);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}

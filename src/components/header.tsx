@@ -9,6 +9,7 @@ import { Plane, Train, Menu, User, LogIn, Users } from 'lucide-react';
 import LanguageSwitcher from './language-switcher';
 import { useSupabaseConfig } from '@/lib/supabase-config-inject';
 import { getSupabaseBrowserClientWithRetry } from '@/lib/supabase-browser';
+import Image from 'next/image';
 
 const navLinks = [
   { href: '/', key: 'nav.home' },
@@ -26,6 +27,7 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState<'retail' | 'agent' | 'admin'>('retail');
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -33,8 +35,6 @@ export default function Header() {
         const supabase = await getSupabaseBrowserClientWithRetry();
         const { data: { session } } = await supabase.auth.getSession();
         setIsLoggedIn(!!session);
-        // TODO: Fetch user role from database
-        // For now, default to retail
         setUserRole('retail');
       } catch {
         setIsLoggedIn(false);
@@ -46,44 +46,49 @@ export default function Header() {
     }
   }, [isConfigLoading]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 80);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#0A2647] text-white shadow-md">
-      <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
+    <header className={`fixed top-0 left-0 right-0 z-50 premium-header ${scrolled ? 'scrolled' : ''}`}>
+      <div className="max-w-[1400px] mx-auto px-6">
+        <div className="flex h-18 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <Plane className="h-6 w-6 text-[#F5A623]" />
-            <span className="font-bold text-lg">FlyViaggi</span>
-            {/* Discount Badge */}
-            <span className="hidden sm:inline-flex items-center gap-1 bg-[#E2001A] text-white text-xs px-2 py-0.5 rounded-full ml-2">
-              <Train className="w-3 h-3" />
-              -40%
+          <Link href="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
+            <Image src="/assets/logo.png" alt="飞扬旅行社" width={44} height={44} className="drop-shadow-lg" />
+            <span className="font-extrabold text-xl text-white hidden sm:block"
+              style={{ background: 'linear-gradient(135deg, #fff 0%, #F5A623 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              飞扬旅行社
             </span>
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden md:flex items-center gap-7">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-sm font-medium transition-colors flex items-center gap-1 ${
-                  link.highlight 
-                    ? 'text-[#E2001A] hover:text-[#c00017]' 
-                    : 'hover:text-[#F5A623]'
-                }`}
+                className={`nav-link-premium text-sm font-medium text-white/90 hover:text-white transition-colors flex items-center gap-1.5`}
               >
                 {t(link.key)}
                 {link.highlight && (
-                  <span className="bg-[#E2001A] text-white text-xs px-1.5 py-0.5 rounded">-40%</span>
+                  <span className="text-xs px-1.5 py-0.5 rounded-md text-white font-bold"
+                    style={{ background: 'linear-gradient(135deg, #E2001A, #FF6B6B)' }}>
+                    -40%
+                  </span>
                 )}
               </Link>
             ))}
-            
+
             {/* Agent Link */}
-            <Link 
-              href="/agent/register" 
-              className="text-sm font-medium text-[#F5A623] hover:text-[#e09000] transition-colors flex items-center gap-1"
+            <Link
+              href="/agent/register"
+              className="nav-link-premium text-sm font-medium text-[#F5A623] hover:text-[#FFD700] transition-colors flex items-center gap-1.5"
             >
               <Users className="w-4 h-4" />
               {t('home.agentLink')}
@@ -91,25 +96,25 @@ export default function Header() {
           </nav>
 
           {/* Right side */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <LanguageSwitcher />
-            
+
             {/* Role-based navigation */}
             {userRole === 'agent' && (
               <Link href="/agent/dashboard" className="hidden md:flex">
-                <Button variant="outline" size="sm" className="text-[#F5A623] border-[#F5A623] hover:bg-[#F5A623]/10">
+                <Button variant="outline" size="sm" className="text-[#F5A623] border-[#F5A623]/50 hover:bg-[#F5A623]/10 backdrop-blur-sm bg-white/5">
                   {t('nav.agent')}
                 </Button>
               </Link>
             )}
             {userRole === 'admin' && (
               <Link href="/admin" className="hidden md:flex">
-                <Button variant="outline" size="sm" className="text-[#E2001A] border-[#E2001A] hover:bg-[#E2001A]/10">
+                <Button variant="outline" size="sm" className="text-[#FF6B6B] border-[#FF6B6B]/50 hover:bg-[#FF6B6B]/10 backdrop-blur-sm bg-white/5">
                   {t('nav.admin')}
                 </Button>
               </Link>
             )}
-            
+
             {/* User Account */}
             <Link href={isLoggedIn ? '/account' : '/login'}>
               <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
@@ -124,11 +129,11 @@ export default function Header() {
             {/* Mobile Menu */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild className="md:hidden">
-                <Button variant="ghost" size="icon" className="text-white">
+                <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="bg-[#0A2647] text-white">
+              <SheetContent side="right" className="bg-[#0A2647]/95 backdrop-blur-xl text-white border-white/10">
                 <nav className="flex flex-col gap-4 mt-8">
                   {navLinks.map((link) => (
                     <Link
@@ -136,14 +141,15 @@ export default function Header() {
                       href={link.href}
                       onClick={() => setIsOpen(false)}
                       className={`text-lg font-medium transition-colors flex items-center gap-2 ${
-                        link.highlight 
-                          ? 'text-[#E2001A]' 
-                          : 'hover:text-[#F5A623]'
+                        link.highlight ? 'text-[#FF6B6B]' : 'hover:text-[#F5A623]'
                       }`}
                     >
                       {t(link.key)}
                       {link.highlight && (
-                        <span className="bg-[#E2001A] text-white text-xs px-2 py-1 rounded">40% OFF</span>
+                        <span className="text-xs px-2 py-0.5 rounded text-white"
+                          style={{ background: 'linear-gradient(135deg, #E2001A, #FF6B6B)' }}>
+                          -40%
+                        </span>
                       )}
                     </Link>
                   ))}
@@ -151,7 +157,7 @@ export default function Header() {
                   <Link
                     href="/agent/register"
                     onClick={() => setIsOpen(false)}
-                    className="text-lg font-medium text-[#F5A623] hover:text-[#e09000] transition-colors flex items-center gap-2"
+                    className="text-lg font-medium text-[#F5A623] hover:text-[#FFD700] transition-colors flex items-center gap-2"
                   >
                     <Users className="w-5 h-5" />
                     {t('home.agentLink')}

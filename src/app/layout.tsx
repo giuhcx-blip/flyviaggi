@@ -49,7 +49,7 @@ export default function RootLayout({
 
   return (
     <html lang="zh">
-      <body className={`antialiased min-h-screen bg-white`}>
+      <body className={`antialiased min-h-screen`}>
         <I18nProvider>
           <SupabaseConfigProvider>
             {isDev && <Inspector />}
