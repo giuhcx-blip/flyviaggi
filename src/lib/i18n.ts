@@ -451,6 +451,6 @@ export const translations = {
 
 export const languageNames: Record<Language, string> = {
   zh: '中文',
-  it: '意大利语',
-  en: 'English',
+  it: 'IT',
+  en: 'EN',
 };
